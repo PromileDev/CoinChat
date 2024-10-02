@@ -4,7 +4,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 # Comando /languaje
 
-async def selectLanguaje(update: Update, context):
+async def selectLanguage(update: Update, context):
     # Crear botones en fila (Reply Keyboard)
     keyboard = [
         [KeyboardButton("Español 🇪🇸"), KeyboardButton("Inglés 🏴󠁧󠁢󠁥󠁮󠁧󠁿")]
