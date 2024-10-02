@@ -7,8 +7,7 @@ cursor = conn.cursor()
 # Create tables
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL primary key,
     currency_preference TEXT,
     language_preference TEXT
 )
@@ -60,6 +59,8 @@ def upDateLanguage(user_id, language_preference):
     conn.commit()
     conn.close()
 
+
+
 # Function to add a cryptocurrency
 def add_cryptocurrency(name, current_price):
     conn = sqlite3.connect('telegram_bot.db')
@@ -71,6 +72,10 @@ def add_cryptocurrency(name, current_price):
     conn.commit()
     conn.close()
 
+
+#
+# pendiente de ver
+#
 # Function to add an alert
 def add_alert(user_id, cryptocurrency_id, target_price, currency_preference):
     conn = sqlite3.connect('telegram_bot.db')
@@ -82,6 +87,10 @@ def add_alert(user_id, cryptocurrency_id, target_price, currency_preference):
     conn.commit()
     conn.close()
 
+
+#
+# pendiente de ver
+#
 # Function to check and send alerts (simplified example)
 def check_and_send_alerts():
     conn = sqlite3.connect('telegram_bot.db')
@@ -110,7 +119,7 @@ def checkUser(user_id):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
-    SELECT * FROM users WHERE id = ?
+    SELECT * FROM users WHERE name = ?
     ''', (user_id,))
     user = cursor.fetchone()
     conn.close()
@@ -128,5 +137,17 @@ def delete_all_users():
     ''')
     conn.commit()
     conn.close()
+
+#drop table users
+def drop_table_users():
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    DROP TABLE users
+    ''')
+    conn.commit()
+    conn.close()
+
+
 
 print_all_users()
