@@ -11,7 +11,7 @@ with open('config.json') as file:
 
 # Define una función para el comando /start con botones en fila
 async def start(update: Update, context):
-    user_first_name = update.message.from_user.first_name
+    user_id = update.message.from_user.id
 
     # Crear botones en fila (Reply Keyboard)
     keyboard = [
