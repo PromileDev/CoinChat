@@ -45,11 +45,11 @@ CREATE TABLE IF NOT EXISTS languages (
 ''')
 
 cursor.execute('''
-INSERT INTO cryptocurrencies (id, name, current_price) VALUES
+INSERT OR IGNORE INTO cryptocurrencies (id, name, current_price) VALUES
 ('LTC', 'Litecoin', 0),
 ('ETH', 'Ethereum', 0),
 ('XBT', 'Bitcoin', 0);
-''')         
+''')     
 
 
 
