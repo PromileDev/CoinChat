@@ -1,7 +1,7 @@
 import json
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, ManageAPI
+from cogs import ManageBD, Language, Moneda, ManageAPI, MainPage
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
