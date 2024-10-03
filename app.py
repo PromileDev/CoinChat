@@ -1,7 +1,7 @@
 import json
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda
+from cogs import ManageBD, Language, Moneda, Alerts
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -18,13 +18,6 @@ async def start(update: Update, context):
         ManageBD.add_user(user_id, username ,'EUR', 'es')
 
     await Language.selectLanguage(update, context)
-
-    # Envuelve los botones en un teclado que aparece encima del campo de texto
-    #reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
-    
-    # Envía un mensaje con el teclado de respuesta
-    #await update.message.reply_text('Elige una opción / Select option:', reply_markup=reply_markup)
-
 
 # Define una función que maneje los mensajes de texto
 async def echo(update: Update, context):
@@ -65,6 +58,9 @@ if __name__ == '__main__':
     #botones
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
     print("El bot está en línea y listo para recibir mensajes.")
+
+    #job_queue = app.job_queue
+    #job_queue.run_repeating(Alerts.check_alerts, interval=10, first=0)
 
     app.run_polling()
 

@@ -7,7 +7,7 @@ cursor = conn.cursor()
 # Create tables
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS users (
-    id TEXT NOT NULL primary key,
+    id INTEGER NOT NULL primary key,
     username TEXT NOT NULL,
     currency_preference TEXT,
     language_preference TEXT
@@ -29,11 +29,9 @@ CREATE TABLE IF NOT EXISTS alerts (
     cryptocurrency_id INTEGER NOT NULL,
     target_price REAL NOT NULL,
     currency_preference TEXT NOT NULL,
-    current_price REAL NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(cryptocurrency_id) REFERENCES cryptocurrencies(id)
+    FOREIGN KEY(cryptocurrency_id) REFERENCES cryptocurrencies(id),
     FOREIGN KEY(currency_preference) REFERENCES users(currency_preference) ON UPDATE CASCADE
-    FOREIGN KEY(current_price) REFERENCES cryptocurrencies(current_price) ON UPDATE CASCADE
 )
 ''')
 
