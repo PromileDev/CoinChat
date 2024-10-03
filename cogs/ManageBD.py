@@ -33,11 +33,20 @@ CREATE TABLE IF NOT EXISTS alerts (
 )
 ''')
 
-# Commit changes and close connection
+#Tabla de idiomas
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS languages (
+    prompt TEXT NOT NULL,
+    language TEXT NOT NULL
+    id_text TEXT NOT NULL
+)
+''')
+
+# Ejecutar los cambios y cerrar la conexión
 conn.commit()
 conn.close()
 
-# Function to add a user
+# funcion para añadir un usuario
 def add_user(name, currency_preference, language_preference):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
@@ -48,6 +57,7 @@ def add_user(name, currency_preference, language_preference):
     conn.commit()
     conn.close()
 
+#funcion para cambiar el idioma
 def upDateLanguage(user_id, language_preference):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
@@ -59,16 +69,15 @@ def upDateLanguage(user_id, language_preference):
     conn.commit()
     conn.close()
 
-
-
-# Function to add a cryptocurrency
-def add_cryptocurrency(name, current_price):
+#funcion para cambiar la moneda
+def upDateCurrency(user_id, currency_preference):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
-    INSERT INTO cryptocurrencies (name, current_price)
-    VALUES (?, ?)
-    ''', (name, current_price))
+    UPDATE users
+    SET currency_preference = ?
+    WHERE name = ?
+    ''', (currency_preference, user_id))
     conn.commit()
     conn.close()
 
@@ -104,6 +113,9 @@ def check_and_send_alerts():
 
     conn.close()
 
+
+
+
 #print all users
 def print_all_users():
     conn = sqlite3.connect('telegram_bot.db')
@@ -114,7 +126,8 @@ def print_all_users():
     for row in cursor.fetchall():
         print(row)
     conn.close()
-# Function to check if a user exists
+
+# Funcion para ver si existe un usuario
 def checkUser(user_id):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()

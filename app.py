@@ -1,7 +1,7 @@
 import json
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language
+from cogs import ManageBD, Language, Moneda
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -34,13 +34,22 @@ async def echo(update: Update, context):
     # Idioma
     if message_text == "Español 🇪🇸":
         ManageBD.upDateLanguage(user_id, 'es')
-    elif message_text == "Inglés 🏴󠁧󠁢󠁥󠁮󠁧󠁿":
+        await update.message.reply_text('Idioma actualizado a Español 🇪🇸')
+        await Moneda.selectCurrency(update, context)
+    elif message_text == "English 🏴󠁧󠁢󠁥󠁮󠁧󠁿":
         ManageBD.upDateLanguage(user_id, 'en')
+        await update.message.reply_text('Lenguage update to English 🏴󠁧󠁢󠁥󠁮󠁧󠁿')
+        await Moneda.selectCurrency(update, context)
+    # Moneda
+    elif message_text == "EUR €":
+        ManageBD.upDateCurrency(user_id, 'EUR')
+        await update.message.reply_text('Moneda actualizada a EUR €')
+    elif message_text == "USD $":
+        ManageBD.upDateCurrency(user_id, 'USD')
+        await update.message.reply_text('Moneda actualizada a USD $')
     else:
         # Responder con el texto que envió el usuario si no es un botón
         await update.message.reply_text(f"Lo siento no entiendo que quieres decir con: {message_text}")
-
-
 
 
 
