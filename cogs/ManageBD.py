@@ -7,7 +7,8 @@ cursor = conn.cursor()
 # Create tables
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS users (
-    name TEXT NOT NULL primary key,
+    id TEXT NOT NULL primary key,
+    username TEXT NOT NULL,
     currency_preference TEXT,
     language_preference TEXT
 )
@@ -37,7 +38,7 @@ CREATE TABLE IF NOT EXISTS alerts (
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS languages (
     prompt TEXT NOT NULL,
-    language TEXT NOT NULL
+    language TEXT NOT NULL,
     id_text TEXT NOT NULL
 )
 ''')
@@ -47,13 +48,13 @@ conn.commit()
 conn.close()
 
 # funcion para añadir un usuario
-def add_user(name, currency_preference, language_preference):
+def add_user(id, username, currency_preference, language_preference):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
-    INSERT INTO users (name, currency_preference, language_preference)
-    VALUES (?, ?, ?)
-    ''', (name, currency_preference, language_preference))
+    INSERT INTO users (id, username ,currency_preference, language_preference)
+    VALUES (?, ?, ?, ?)
+    ''', (id, username, currency_preference, language_preference))
     conn.commit()
     conn.close()
 
@@ -64,7 +65,7 @@ def upDateLanguage(user_id, language_preference):
     cursor.execute('''
     UPDATE users
     SET language_preference = ?
-    WHERE name = ?
+    WHERE id = ?
     ''', (language_preference, user_id))
     conn.commit()
     conn.close()
@@ -76,7 +77,7 @@ def upDateCurrency(user_id, currency_preference):
     cursor.execute('''
     UPDATE users
     SET currency_preference = ?
-    WHERE name = ?
+    WHERE id = ?
     ''', (currency_preference, user_id))
     conn.commit()
     conn.close()
@@ -132,7 +133,7 @@ def checkUser(user_id):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
-    SELECT * FROM users WHERE name = ?
+    SELECT * FROM users WHERE id = ?
     ''', (user_id,))
     user = cursor.fetchone()
     conn.close()
@@ -141,13 +142,21 @@ def checkUser(user_id):
     else:
         return False
 
-#delete all users
-def delete_all_users():
+#delete all usaers
+def delete_all_user():
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
     DELETE FROM users
     ''')
+    conn.commit()
+    conn.close()
+def delete_user(user_id):
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    DELETE FROM users WHERE id = ?
+    ''', (user_id,))
     conn.commit()
     conn.close()
 
@@ -160,7 +169,6 @@ def drop_table_users():
     ''')
     conn.commit()
     conn.close()
-
 
 
 print_all_users()

@@ -12,9 +12,10 @@ with open('config.json') as file:
 # Define una función para el comando /start con botones en fila
 async def start(update: Update, context):
     user_id = update.message.from_user.id
+    username = update.message.from_user.name
     
     if (ManageBD.checkUser(user_id) == False):
-        ManageBD.add_user(user_id, 'EUR', 'es')
+        ManageBD.add_user(user_id, username ,'EUR', 'es')
 
     await Language.selectLanguage(update, context)
 
@@ -29,6 +30,7 @@ async def start(update: Update, context):
 async def echo(update: Update, context):
     message_text = update.message.text
     user_id = update.message.from_user.id
+    username = update.message.from_user.name
 
 
     # Idioma
