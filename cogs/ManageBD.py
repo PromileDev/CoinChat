@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS cryptocurrencies (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     current_price REAL NOT NULL
 )
@@ -43,6 +43,15 @@ CREATE TABLE IF NOT EXISTS languages (
     id_text TEXT NOT NULL
 )
 ''')
+
+cursor.execute('''
+INSERT INTO cryptocurrencies (id, name, current_price) VALUES
+('LTC', 'Litecoin', 0),
+('ETH', 'Ethereum', 0),
+('XBT', 'Bitcoin', 0);
+''')         
+
+
 
 # Ejecutar los cambios y cerrar la conexión
 conn.commit()
