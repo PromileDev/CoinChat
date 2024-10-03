@@ -42,7 +42,7 @@ print(f"El precio actual de Bitcoin es: {Price2} EUR")
 
 '''
 CRYPTO
-Bitcoin: XBTUSD
-Ethereum: ETHUSD
-Litecoin: LTCUSD
+Bitcoin: XBT
+Ethereum: ETH
+Litecoin: LTC
 '''
