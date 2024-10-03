@@ -29,8 +29,11 @@ CREATE TABLE IF NOT EXISTS alerts (
     cryptocurrency_id INTEGER NOT NULL,
     target_price REAL NOT NULL,
     currency_preference TEXT NOT NULL,
+    current_price REAL NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id),
     FOREIGN KEY(cryptocurrency_id) REFERENCES cryptocurrencies(id)
+    FOREIGN KEY(currency_preference) REFERENCES users(currency_preference)
+    FOREIGN KEY(current_price) REFERENCES cryptocurrencies(current_price)
 )
 ''')
 
