@@ -7,6 +7,11 @@ def getPriceUSD(cripto):
     
     if "result" in data:
         precio = data["result"][list(data["result"].keys())[0]]['c'][0]  # Precio actual
+        #str to float
+        precio_float = float(precio)
+        # redondear precio
+        precio = round(precio_float, 2)
+        
         return precio
     else:
         return None
@@ -17,7 +22,12 @@ def getPriceEUR(cripto):
     data = response.json()
     
     if "result" in data:
-        precio = data["result"][list(data["result"].keys())[0]]['c'][0]  # Precio actual
+        precio = data["result"][list(data["result"].keys())[0]]['c'][0] 
+        # redondear precio
+        precio_float = float(precio)
+        # redondear precio
+        precio = round(precio_float, 2)
+        
         return precio
     else:
         return None

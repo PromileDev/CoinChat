@@ -1,7 +1,7 @@
 import json
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, Alerts
+from cogs import ManageBD, Language, Moneda, ManageAPI
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -29,7 +29,7 @@ async def echo(update: Update, context):
     # Idioma
     if message_text == "Español 🇪🇸":
         ManageBD.upDateLanguage(user_id, 'es')
-        await update.message.reply_text('Idioma actualizado a Español 🇪🇸')
+        await update.message.reply_text(f"{ManageAPI.getPriceEUR('XBT')} €")
         await Moneda.selectCurrency(update, context)
     elif message_text == "English 🏴󠁧󠁢󠁥󠁮󠁧󠁿":
         ManageBD.upDateLanguage(user_id, 'en')
