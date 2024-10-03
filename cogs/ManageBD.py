@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS alerts (
     current_price REAL NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id),
     FOREIGN KEY(cryptocurrency_id) REFERENCES cryptocurrencies(id)
-    FOREIGN KEY(currency_preference) REFERENCES users(currency_preference)
-    FOREIGN KEY(current_price) REFERENCES cryptocurrencies(current_price)
+    FOREIGN KEY(currency_preference) REFERENCES users(currency_preference) ON UPDATE CASCADE
+    FOREIGN KEY(current_price) REFERENCES cryptocurrencies(current_price) ON UPDATE CASCADE
 )
 ''')
 
