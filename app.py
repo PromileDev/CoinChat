@@ -29,7 +29,7 @@ async def echo(update: Update, context):
     # Idioma
     if message_text == "Español 🇪🇸":
         ManageBD.upDateLanguage(user_id, 'es')
-        await update.message.reply_text(f"{ManageAPI.getPriceEUR('XBT')} €")
+        await update.message.reply_text('Lenguage update to Español 🇪🇸')
         await Moneda.selectCurrency(update, context)
     elif message_text == "English 🏴󠁧󠁢󠁥󠁮󠁧󠁿":
         ManageBD.upDateLanguage(user_id, 'en')
