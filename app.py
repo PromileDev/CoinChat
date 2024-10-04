@@ -42,7 +42,7 @@ async def echo(update: Update, context):
     # seleccionar Idioma
     if message_text == "Español 🇪🇸":
         ManageBD.upDateLanguage(user_id, 'es')
-        await update.message.reply_text('Lenguage update to Español 🇪🇸')
+        await update.message.reply_text('Idioma actualizado a Español 🇪🇸')
         if not ManageBD.checkCurrency(user_id):
             await Moneda.selectCurrency(update, context)
     elif message_text == "English 🏴󠁧󠁢󠁥󠁮󠁧󠁿":
@@ -82,7 +82,14 @@ async def echo(update: Update, context):
                 await MainPage.MainPageENG(update, context)
     
     elif message_text == "Cuenta" or message_text == "Account":
-        await Config.userConfig(update, context)
+        await Config.userProfile(update, context)
+        if ManageBD.getLanguage(user_id) == 'es':
+            await Config.configPageESP(update, context)
+        else:
+            await Config.configPageENG(update, context)
+
+    elif message_text == "Idioma" or message_text == "Language":
+        await Language.selectLanguage(update, context)
 
 
 
