@@ -18,9 +18,10 @@ async def MainPageESP(update: Update, context):
 async def MainPageENG(update: Update, context):
     # Crear botones en fila (Reply Keyboard)
     keyboard = [
-        [KeyboardButton("Español 🇪🇸"), KeyboardButton("English 🏴󠁧󠁢󠁥󠁮󠁧󠁿")]
+        [KeyboardButton("Price"), KeyboardButton("Alerts")],
+        [KeyboardButton("Account")],
     ]
     # Envuelve los botones en un teclado que aparece encima del campo de texto
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     # Envía un mensaje con el teclado de respuesta
-    await update.message.reply_text('Elige un idioma:', reply_markup=reply_markup)
+    await update.message.reply_text('Choose an option:', reply_markup=reply_markup)

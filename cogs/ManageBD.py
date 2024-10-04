@@ -30,8 +30,7 @@ CREATE TABLE IF NOT EXISTS alerts (
     target_price REAL NOT NULL,
     currency_preference TEXT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(cryptocurrency_id) REFERENCES cryptocurrencies(id),
-    FOREIGN KEY(currency_preference) REFERENCES users(currency_preference) ON UPDATE CASCADE
+    FOREIGN KEY(cryptocurrency_id) REFERENCES cryptocurrencies(id)
 )
 ''')
 
@@ -56,6 +55,8 @@ INSERT OR IGNORE INTO cryptocurrencies (id, name, current_price) VALUES
 # Ejecutar los cambios y cerrar la conexión
 conn.commit()
 conn.close()
+
+
 
 # funcion para añadir un usuario
 def add_user(id, username, currency_preference, language_preference):
@@ -138,7 +139,7 @@ def print_all_users():
         print(row)
     conn.close()
 
-# Funcion para ver si existe un usuario
+# Checks
 def checkUser(user_id):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
@@ -151,6 +152,52 @@ def checkUser(user_id):
         return True
     else:
         return False
+def checkLanguage(user_id):
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT language_preference FROM users WHERE id = ?
+    ''', (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return bool(user and user[0])
+def checkCurrency(user_id):
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT currency_preference FROM users WHERE id = ?
+    ''', (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return bool(user and user[0])
+
+
+
+# Getters
+def getLanguage(user_id):
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT language_preference FROM users WHERE id = ?
+    ''', (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return user[0]
+
+def getCurrency(user_id):
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT currency_preference FROM users WHERE id = ?
+    ''', (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return user[0]
+
+
+
+
+
 
 #delete all usaers
 def delete_all_user():
