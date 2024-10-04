@@ -1,7 +1,7 @@
 import json
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, ManageAPI, MainPage
+from cogs import ManageBD, Language, Moneda, ManageAPI, MainPage, Config
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -14,10 +14,23 @@ async def start(update: Update, context):
     user_id = update.message.from_user.id
     username = update.message.from_user.name
     
-    if (ManageBD.checkUser(user_id) == False):
-        ManageBD.add_user(user_id, username ,'EUR', 'es')
+    if not ManageBD.checkUser(user_id):
+        ManageBD.add_user(user_id, username, None, None)
 
-    await Language.selectLanguage(update, context)
+    if not ManageBD.checkLanguage(user_id):
+        await Language.selectLanguage(update, context)
+        return
+
+    if not ManageBD.checkCurrency(user_id):
+        await Moneda.selectCurrency(update, context)
+
+    if ManageBD.getLanguage(user_id) == 'es':
+        await MainPage.MainPageESP(update, context)
+    else:
+        await MainPage.MainPageENG(update, context)
+
+
+    
 
 # Define una función que maneje los mensajes de texto
 async def echo(update: Update, context):
@@ -26,25 +39,50 @@ async def echo(update: Update, context):
     username = update.message.from_user.name
 
 
-    # Idioma
+    # seleccionar Idioma
     if message_text == "Español 🇪🇸":
         ManageBD.upDateLanguage(user_id, 'es')
-        await update.message.reply_text(f"{ManageAPI.getPriceEUR('XBT')} €")
-        await Moneda.selectCurrency(update, context)
+        await update.message.reply_text('Lenguage update to Español 🇪🇸')
+        if not ManageBD.checkCurrency(user_id):
+            await Moneda.selectCurrency(update, context)
     elif message_text == "English 🏴󠁧󠁢󠁥󠁮󠁧󠁿":
         ManageBD.upDateLanguage(user_id, 'en')
         await update.message.reply_text('Lenguage update to English 🏴󠁧󠁢󠁥󠁮󠁧󠁿')
-        await Moneda.selectCurrency(update, context)
-    # Moneda
+        if not ManageBD.checkCurrency(user_id):
+            await Moneda.selectCurrency(update, context)
+    
+    
+ # Selección de moneda
     elif message_text == "EUR €":
         ManageBD.upDateCurrency(user_id, 'EUR')
-        await update.message.reply_text('Moneda actualizada a EUR €')
+        await update.message.reply_text('Currency updated to EUR €.')
+        
+        # Verifica si ya tiene un idioma seleccionado
+        if not ManageBD.checkLanguage(user_id):
+            await Language.selectLanguage(update, context)
+        else:
+            # Si ya tiene un idioma, muestra la página principal en ese idioma
+            if ManageBD.getLanguage(user_id) == 'es':
+                await MainPage.MainPageESP(update, context)
+            else:
+                await MainPage.MainPageENG(update, context)
+    
     elif message_text == "USD $":
         ManageBD.upDateCurrency(user_id, 'USD')
-        await update.message.reply_text('Moneda actualizada a USD $')
-    else:
-        # Responder con el texto que envió el usuario si no es un botón
-        await update.message.reply_text(f"Lo siento no entiendo que quieres decir con: {message_text}")
+        await update.message.reply_text('Currency updated to USD $.')
+        
+        # Verifica si ya tiene un idioma seleccionado
+        if not ManageBD.checkLanguage(user_id):
+            await Language.selectLanguage(update, context)
+        else:
+            # Si ya tiene un idioma, muestra la página principal en ese idioma
+            if ManageBD.getLanguage(user_id) == 'es':
+                await MainPage.MainPageESP(update, context)
+            else:
+                await MainPage.MainPageENG(update, context)
+    
+    elif message_text == "Cuenta" or message_text == "Account":
+        await Config.userConfig(update, context)
 
 
 
