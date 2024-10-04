@@ -1,4 +1,5 @@
 import json
+import time
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from cogs import ManageBD, Language, Moneda, ManageAPI, MainPage, UserAccount
@@ -37,28 +38,10 @@ async def start(update: Update, context):
 async def help(update: Update, context):
     user_id = update.message.from_user.id
     if (ManageBD.getLanguage(user_id) == 'es'):
-        await update.message.reply_text('''
-👋 ¡Bienvenido a nuestro bot de Telegram!
-Este bot ofrece dos funciones principales para ayudarte a seguir el mercado de criptomonedas:
-
-Consulta de precios en tiempo real: Puedes solicitar el precio actual de estas criptomoneda: Bitcoin (BTC) o Ethereum (ETH), y el bot te mostrará el valor en monedas populares como USD o EUR.
-
-Alertas automáticas de precios: Configura alertas para tu criptomoneda preferida. Solo necesitas establecer un precio objetivo, y te enviaremos una notificación cuando se alcance.
-
-Comienza ahora eligiendo cuál de las dos funciones principales quieres hacer.
-''')
+        await update.message.reply_text(ManageBD.getPrompt("es", "help_msg"))
 
     else:
-        await update.message.reply_text('''
-👋 Welcome to our Telegram bot!
-This bot offers two main features to help you track the cryptocurrency market:
-
-Real-time price check: You can request the current price of this cryptocurrency: Bitcoin (BTC) or Ethereum (ETH), and the bot will show you the value in popular currencies like USD or EUR.
-
-Automatic price alerts: Set up alerts for your preferred cryptocurrency. Just choose a target price, and we'll notify you when it's reached.
-
-Start now by choosing which of the two main features you'd like to use.
- ''')
+        await update.message.reply_text(ManageBD.getPrompt("en", "help_msg"))
                                         
 # Define una función que maneje los mensajes de texto
 async def echo(update: Update, context):
