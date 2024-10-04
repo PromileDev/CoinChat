@@ -1,5 +1,5 @@
 import json
-import time
+import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from cogs import ManageBD, Language, Moneda, ManageAPI, MainPage, UserAccount
@@ -118,16 +118,32 @@ async def echo(update: Update, context):
         await start(update, context)
 
 
+async def custom_loop():
+    while True:
+        print("Bot is still running...")
+        await asyncio.sleep(10)
 
+
+
+async def main():
+    app = ApplicationBuilder().token(token).build()
+
+    app.add_handler(CommandHandler('start', start))
+    app.add_handler(CommandHandler('help', help))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+
+    print("El bot está en línea y listo para recibir mensajes.")
+    
+    # Inicializa la aplicación
+    await app.initialize()
+
+    # Ejecuta ambos bucles en paralelo: el de PTB y el personalizado
+    await asyncio.gather(app.start(), custom_loop())
+
+    # Finaliza la aplicación
+    await app.stop()
+    await app.shutdown()
 
 #Ejecucion del bot
 if __name__ == '__main__':
-    app = ApplicationBuilder().token(token).build()
-    #slash commands
-    app.add_handler(CommandHandler('start', start))
-    app.add_handler(CommandHandler('help', help))
-    #botones
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
-    print("El bot está en línea y listo para recibir mensajes.")
-    #Ejecutar el bot
-    app.run_polling()
+    asyncio.run(main())
