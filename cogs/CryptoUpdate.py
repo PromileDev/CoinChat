@@ -1,5 +1,4 @@
-from ManageBD import update_cryptocurrency_price
-from ManageAPI import *
+from cogs import ManageBD, ManageAPI
 
 def update():
     updateBTC()
@@ -8,15 +7,15 @@ def update():
     print("Cryptocurrency prices updated.")
 
 def updateBTC():
-    update_cryptocurrency_price("XBTEUR", getPriceEUR('XBT'))
-    update_cryptocurrency_price("XBTUSD", getPriceUSD('XBT'))
+    ManageBD.update_cryptocurrency_price("XBTEUR", ManageAPI.getPriceEUR('XBT'))
+    ManageBD.update_cryptocurrency_price("XBTUSD", ManageAPI.getPriceUSD('XBT'))
 
 def updateETH():
-    update_cryptocurrency_price("ETHEUR", getPriceEUR('ETH'))
-    update_cryptocurrency_price("ETHUSD", getPriceUSD('ETH'))
+    ManageBD.update_cryptocurrency_price("ETHEUR", ManageAPI.getPriceEUR('ETH'))
+    ManageBD.update_cryptocurrency_price("ETHUSD", ManageAPI.getPriceUSD('ETH'))
 
 def updateLTC():
-    update_cryptocurrency_price("LTCEUR", getPriceEUR('LTC'))
-    update_cryptocurrency_price("LTCUSD", getPriceUSD('LTC'))
+    ManageBD.update_cryptocurrency_price("LTCEUR", ManageAPI.getPriceEUR('LTC'))
+    ManageBD.update_cryptocurrency_price("LTCUSD", ManageAPI.getPriceUSD('LTC'))
 
 update()
