@@ -2,7 +2,7 @@ import json
 import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, ManageAPI, MainPage, UserAccount
+from cogs import ManageBD, Language, Moneda, ManageAPI, MainPage, UserAccount, CryptoUpdate
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -52,7 +52,7 @@ async def echo(update: Update, context):
 
     # seleccionar Idioma
     if message_text == "Español 🇪🇸":
-        ManageBD.upDateLanguage(user_id, 'es')
+        ManageBD.updateLanguage(user_id, 'es')
         await update.message.reply_text('Idioma actualizado a Español 🇪🇸')
         # Verifica si ya tiene una moneda seleccionada y si no, muestra la selección de moneda
         if not ManageBD.checkCurrency(user_id):
@@ -60,7 +60,7 @@ async def echo(update: Update, context):
         else:
             await MainPage.MainPageESP(update, context)
     elif message_text == "English 🏴󠁧󠁢󠁥󠁮󠁧󠁿":
-        ManageBD.upDateLanguage(user_id, 'en')
+        ManageBD.updateLanguage(user_id, 'en')
         await update.message.reply_text('Language update to English 🏴󠁧󠁢󠁥󠁮󠁧󠁿')
         # Verifica si ya tiene una moneda seleccionada y si no, muestra la selección de moneda
         if not ManageBD.checkCurrency(user_id):
@@ -71,7 +71,7 @@ async def echo(update: Update, context):
     
  # Selección de moneda
     elif message_text == "EUR €":
-        ManageBD.upDateCurrency(user_id, 'EUR')
+        ManageBD.updateCurrency(user_id, 'EUR')
         await update.message.reply_text('Currency updated to EUR €.')
         
         # Verifica si ya tiene un idioma seleccionado
@@ -85,7 +85,7 @@ async def echo(update: Update, context):
                 await MainPage.MainPageENG(update, context)
     
     elif message_text == "USD $":
-        ManageBD.upDateCurrency(user_id, 'USD')
+        ManageBD.updateCurrency(user_id, 'USD')
         await update.message.reply_text('Currency updated to USD $.')
         
         # Verifica si ya tiene un idioma seleccionado
@@ -120,7 +120,7 @@ async def echo(update: Update, context):
 
 async def custom_loop():
     while True:
-        print("Bot is still running...")
+        CryptoUpdate.update()
         await asyncio.sleep(10)
 
 
