@@ -18,6 +18,7 @@ cursor.execute('''
 CREATE TABLE IF NOT EXISTS cryptocurrencies (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
+    currency TEXT NOT NULL,
     current_price REAL NOT NULL
 )
 ''')
@@ -44,10 +45,13 @@ CREATE TABLE IF NOT EXISTS languages (
 ''')
 
 cursor.execute('''
-INSERT OR IGNORE INTO cryptocurrencies (id, name, current_price) VALUES
-('LTC', 'Litecoin', 0),
-('ETH', 'Ethereum', 0),
-('XBT', 'Bitcoin', 0);
+INSERT OR IGNORE INTO cryptocurrencies (id, name, currency ,current_price) VALUES
+('LTCEUR', 'Litecoin', 'EUR' ,0),
+('ETHEUR', 'Ethereum', 'EUR' ,0),
+('XBTEUR', 'Bitcoin', 'EUR' ,0),
+('LTCUSD', 'Litecoin', 'USD' ,0),
+('ETHUSD', 'Ethereum', 'USD' ,0),
+('XBTUSD', 'Bitcoin', 'USD' ,0);
 ''')    
 
 #insert datos
@@ -79,7 +83,7 @@ def add_user(id, username, currency_preference, language_preference):
     conn.close()
 
 #funcion para cambiar el idioma
-def upDateLanguage(user_id, language_preference):
+def updateLanguage(user_id, language_preference):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -91,7 +95,7 @@ def upDateLanguage(user_id, language_preference):
     conn.close()
 
 #funcion para cambiar la moneda
-def upDateCurrency(user_id, currency_preference):
+def updateCurrency(user_id, currency_preference):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
@@ -135,18 +139,18 @@ def check_and_send_alerts():
     conn.close()
 
 
-
-
-#print all users
-def print_all_users():
+def update_cryptocurrency_price(cryptocurrency_id, current_price):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
-    SELECT * FROM users
-    ''')
-    for row in cursor.fetchall():
-        print(row)
+    UPDATE cryptocurrencies
+    SET current_price = ?
+    WHERE id = ?
+    ''', (current_price, cryptocurrency_id))
+    conn.commit()
     conn.close()
+
+
 
 # Checks
 def checkUser(user_id):
@@ -231,16 +235,25 @@ def delete_user(user_id):
     ''', (user_id,))
     conn.commit()
     conn.close()
-
-#drop table users
-def drop_table_users():
+#drop table 
+def drop_table(table):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
-    cursor.execute('''
-    DROP TABLE users
+    cursor.execute(f'''
+    DROP TABLE {table}
     ''')
     conn.commit()
     conn.close()
 
+#print all users
+def print_all_users():
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT * FROM users
+    ''')
+    for row in cursor.fetchall():
+        print(row)
+    conn.close()
 
 print_all_users()
