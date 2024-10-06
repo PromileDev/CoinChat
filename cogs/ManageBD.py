@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS alerts (
     user_id INTEGER NOT NULL,
     cryptocurrency_id INTEGER NOT NULL,
     target_price REAL NOT NULL,
-    currency_preference TEXT NOT NULL,
     FOREIGN KEY(user_id) REFERENCES users(id),
     FOREIGN KEY(cryptocurrency_id) REFERENCES cryptocurrencies(id)
 )
@@ -107,38 +106,35 @@ def updateCurrency(user_id, currency_preference):
     conn.close()
 
 
-#
-# pendiente de ver
-#
-# Function to add an alert
-def add_alert(user_id, cryptocurrency_id, target_price, currency_preference):
+
+
+
+#get all alerts from user
+def getAlerts(user_id):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
-    INSERT INTO alerts (user_id, cryptocurrency_id, target_price, currency_preference)
-    VALUES (?, ?, ?, ?)
-    ''', (user_id, cryptocurrency_id, target_price, currency_preference))
+    SELECT * FROM alerts WHERE user_id = ?
+    ''', (user_id,))
+    alerts = cursor.fetchall()
+    conn.close()
+    return alerts
+# add alert
+def addAlert(user_id, cryptocurrency_id, target_price):
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    INSERT INTO alerts (user_id, cryptocurrency_id, target_price)
+    VALUES (?, ?, ?)
+    ''', (user_id, cryptocurrency_id, target_price))
     conn.commit()
     conn.close()
 
 
-#
-# pendiente de ver
-#
-# Function to check and send alerts (simplified example)
-def check_and_send_alerts():
-    conn = sqlite3.connect('telegram_bot.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-    SELECT a.id, u.name, c.name, c.current_price, a.target_price, a.currency_preference
-    FROM alerts a
-    JOIN users u ON a.user_id = u.id
-    JOIN cryptocurrencies c ON a.cryptocurrency_id = c.id
-    ''')
-
-    conn.close()
 
 
+
+# update cryptocurrency price
 def update_cryptocurrency_price(cryptocurrency_id, current_price):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
@@ -149,6 +145,16 @@ def update_cryptocurrency_price(cryptocurrency_id, current_price):
     ''', (current_price, cryptocurrency_id))
     conn.commit()
     conn.close()
+# get cryptocurrency price
+def get_cryptocurrency_price():
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT id,current_price FROM cryptocurrencies
+    ''')
+    cryptocurrency = cursor.fetchall()
+    conn.close()
+    return cryptocurrency
 
 
 

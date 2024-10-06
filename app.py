@@ -2,7 +2,7 @@ import json
 import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, ManageAPI, MainPage, UserAccount, CryptoUpdate
+from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, Alerts
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -86,19 +86,28 @@ async def echo(update: Update, context):
             else:
                 await MainPage.MainPageENG(update, context)
 
+
+    # User configuration
     elif message_text == "Cuenta" or message_text == "Account":
         await UserAccount.userProfile(update, context)
         if ManageBD.getLanguage(user_id) == 'es':
             await UserAccount.configPageESP(update, context)
         else:
             await UserAccount.configPageENG(update, context)
-
     elif message_text == "Idioma" or message_text == "Language":
         await Language.selectLanguage(update, context)
     elif message_text == "Divisa" or message_text == "Currency":
         await Moneda.selectCurrency(update, context)
     elif message_text == "Volver" or message_text == "Back":
         await start(update, context)
+    
+    # Alerts
+    elif message_text == "Alertas" or message_text == "Alerts":
+        await UserAccount.userProfile(update, context)
+        if ManageBD.getLanguage(user_id) == 'es':
+            await Alerts.alertsPageESP(update, context)
+        else:
+            await Alerts.AlertsPageENG(update, context)
 
 
 #Ejecucion del bot
