@@ -1,4 +1,5 @@
 from cogs import ManageBD, ManageAPI
+import time
 
 def update():
     updateBTC()
@@ -18,4 +19,3 @@ def updateLTC():
     ManageBD.update_cryptocurrency_price("LTCEUR", ManageAPI.getPriceEUR('LTC'))
     ManageBD.update_cryptocurrency_price("LTCUSD", ManageAPI.getPriceUSD('LTC'))
 
-update()
