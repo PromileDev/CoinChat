@@ -2,7 +2,7 @@ import json
 import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, Alerts
+from cogs import ManageBD, Language, Moneda, MainPage, UserAccount
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -56,9 +56,9 @@ async def echo(update: Update, context):
             await Moneda.selectCurrency(update, context)
         else:
             await MainPage.MainPageESP(update, context)
-    elif message_text == "English 🏴":
+    elif message_text == "English 🇬🇧":
         ManageBD.updateLanguage(user_id, 'en')
-        await update.message.reply_text('Language updated to English 🏴')
+        await update.message.reply_text('Language updated to English 🇬🇧')
         if not ManageBD.checkCurrency(user_id):
             await Moneda.selectCurrency(update, context)
         else:
@@ -101,14 +101,15 @@ async def echo(update: Update, context):
     elif message_text == "Volver" or message_text == "Back":
         await start(update, context)
     
-    # Alerts
-    elif message_text == "Alertas" or message_text == "Alerts":
-        await UserAccount.userProfile(update, context)
-        if ManageBD.getLanguage(user_id) == 'es':
-            await Alerts.alertsPageESP(update, context)
-        else:
-            await Alerts.AlertsPageENG(update, context)
+    # # Alerts
+    # elif message_text == "Alertas" or message_text == "Alerts":
+    #     await UserAccount.userProfile(update, context)
+    #     if ManageBD.getLanguage(user_id) == 'es':
+    #         await Alerts.alertsPageESP(update, context)
+    #     else:
+    #         await Alerts.AlertsPageENG(update, context)
 
+app.bot.send_message
 
 #Ejecucion del bot
 if __name__ == '__main__':
@@ -120,4 +121,4 @@ if __name__ == '__main__':
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
     print("El bot está en línea y listo para recibir mensajes.")
     #Ejecutar el bot
-    app.run_polling()
+    app.run_polling(close_loop=False)
