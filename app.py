@@ -8,7 +8,7 @@ from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, Alerts
 with open('config.json') as file:
     data = json.load(file)
     token = data['token']
-
+app = ApplicationBuilder().token(token).build()
 
 # Define una función para el comando /start con botones en fila
 async def start(update: Update, context):
@@ -112,7 +112,7 @@ async def echo(update: Update, context):
 
 #Ejecucion del bot
 if __name__ == '__main__':
-    app = ApplicationBuilder().token(token).build()
+    
     #slash commands
     app.add_handler(CommandHandler('start', start))
     app.add_handler(CommandHandler('help', help))

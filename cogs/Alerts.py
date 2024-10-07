@@ -1,6 +1,6 @@
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 import sqlite3
+from app import send_message_to_user
 from cogs import ManageBD
 
 # Comando addAlert
@@ -23,4 +23,3 @@ async def alertsPageENG(update: Update, context):
 
 async def showAlerts(update: Update, context):
     user_id = update.message.from_user.id
-    
