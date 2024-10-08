@@ -2,7 +2,7 @@ import json
 import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, MainPage, UserAccount
+from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, AlertsPage
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -33,6 +33,9 @@ async def start(update: Update, context):
         await MainPage.MainPageESP(update, context)
     else:
         await MainPage.MainPageENG(update, context)
+
+async def send_message(update: Update, context, message, user_id):
+    await app.bot.sendMessage(chat_id=user_id, text=message)
 
 
 async def help(update: Update, context):
@@ -100,14 +103,15 @@ async def echo(update: Update, context):
         await Moneda.selectCurrency(update, context)
     elif message_text == "Volver" or message_text == "Back":
         await start(update, context)
-    
-    # # Alerts
-    # elif message_text == "Alertas" or message_text == "Alerts":
-    #     await UserAccount.userProfile(update, context)
-    #     if ManageBD.getLanguage(user_id) == 'es':
-    #         await Alerts.alertsPageESP(update, context)
-    #     else:
-    #         await Alerts.AlertsPageENG(update, context)
+
+
+    # Alerts
+    elif message_text == "Alertas" or message_text == "Alerts":
+        await UserAccount.userProfile(update, context)
+        if ManageBD.getLanguage(user_id) == 'es':
+            await AlertsPage.alertsPageESP(update, context)
+        else:
+            await AlertsPage.AlertsPageENG(update, context)
 
 
 
