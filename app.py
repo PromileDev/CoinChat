@@ -34,6 +34,9 @@ async def start(update: Update, context):
     else:
         await MainPage.MainPageENG(update, context)
 
+async def send_message(update: Update, context, message, user_id):
+    await app.bot.sendMessage(chat_id=user_id, text=message)
+
 
 async def help(update: Update, context):
     user_id = update.message.from_user.id
