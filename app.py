@@ -2,7 +2,7 @@ import json
 import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, MainPage, UserAccount
+from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, ManageAPI, PricePage
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -100,6 +100,39 @@ async def echo(update: Update, context):
         await Moneda.selectCurrency(update, context)
     elif message_text == "Volver" or message_text == "Back":
         await start(update, context)
+
+    # User Price
+    elif message_text == "Price" or message_text == "Precio":
+        await PricePage.pagePrice(update, context)
+    elif message_text == "Bitcoin":
+        currency = ManageBD.getCurrency(user_id)
+        try:
+            price = ManageAPI.getPriceEUR("XBT") if currency == 'EUR' else ManageAPI.getPriceUSD("XBT")
+            await update.message.reply_text(f'Precio de Bitcoin: {price} {currency}')
+        except Exception as e:
+            await update.message.reply_text(f'Error al obtener el precio: {e}')
+
+    elif message_text == "Ethereum":
+        currency = ManageBD.getCurrency(user_id)
+        try:
+            price = ManageAPI.getPriceEUR("ETH") if currency == 'EUR' else ManageAPI.getPriceUSD("ETH")
+            await update.message.reply_text(f'Precio de Ethereum: {price} {currency}')
+        except Exception as e:
+            await update.message.reply_text(f'Error al obtener el precio: {e}')
+
+    elif message_text == "Litecoin":
+        currency = ManageBD.getCurrency(user_id)
+        try:
+            price = ManageAPI.getPriceEUR("LTC") if currency == 'EUR' else ManageAPI.getPriceUSD("LTC")
+            await update.message.reply_text(f'Precio de Litecoin: {price} {currency}')
+        except Exception as e:
+            await update.message.reply_text(f'Error al obtener el precio: {e}')
+    elif message_text == "Volver" or message_text == "Back":
+        await start(update, context)
+
+# Ejecución del bot
+
+    
     
     # # Alerts
     # elif message_text == "Alertas" or message_text == "Alerts":
