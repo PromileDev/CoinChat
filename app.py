@@ -109,7 +109,7 @@ async def echo(update: Update, context):
     #     else:
     #         await Alerts.AlertsPageENG(update, context)
 
-app.bot.send_message
+
 
 #Ejecucion del bot
 if __name__ == '__main__':
@@ -121,4 +121,4 @@ if __name__ == '__main__':
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
     print("El bot está en línea y listo para recibir mensajes.")
     #Ejecutar el bot
-    app.run_polling(close_loop=False)
+    app.run_polling()
