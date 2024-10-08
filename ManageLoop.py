@@ -5,7 +5,7 @@ from telegram import Update
 
 async def main_loop():
     while True:
-        # CryptoUpdate.update() # Descomentar si esta función es síncrona
+        CryptoUpdate.update() # Descomentar si esta función es síncrona
         
         # Obtiene las notificaciones para los usuarios
         notifications = ManageBD.check_price_alerts()

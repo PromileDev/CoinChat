@@ -1,10 +1,10 @@
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
-import sqlite3
 
 # Comando addAlert
 async def alertsPageESP(update: Update, context):
     keyboard = [
-        [KeyboardButton("Mis alertas"), KeyboardButton("Nueva Alerta")]
+        [KeyboardButton("Mis alertas"), KeyboardButton("Nueva Alerta")],
+        [KeyboardButton("Volver")]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     # Envía un mensaje con el teclado de respuesta
@@ -12,7 +12,8 @@ async def alertsPageESP(update: Update, context):
 
 async def alertsPageENG(update: Update, context):
     keyboard = [
-        [KeyboardButton("Manage alerts"), KeyboardButton("New Alert")]
+        [KeyboardButton("Manage alerts"), KeyboardButton("New Alert")],
+        [KeyboardButton("Back")]
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     # Envía un mensaje con el teclado de respuesta

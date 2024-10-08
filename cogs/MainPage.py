@@ -12,7 +12,7 @@ async def MainPageESP(update: Update, context):
     # Envuelve los botones en un teclado que aparece encima del campo de texto
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     # Envía un mensaje con el teclado de respuesta
-    await update.message.reply_text('Ejecuta /help si es la primera vez que usas el bot.')
+    await update.message.reply_text('Ejecuta /help para ver los comandos y la información del bot.')
     await update.message.reply_text("Elije una opcion",reply_markup=reply_markup)
 
 
@@ -26,5 +26,5 @@ async def MainPageENG(update: Update, context):
     # Envuelve los botones en un teclado que aparece encima del campo de texto
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     # Envía un mensaje con el teclado de respuesta
-    await update.message.reply_text('Execute /help if it is the first time you use the bot.')
+    await update.message.reply_text('Execute /help if you need to know the commands or getting info of our bot.')
     await update.message.reply_text('Choose an option:', reply_markup=reply_markup)

@@ -114,7 +114,9 @@ def getAlerts(user_id):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
     cursor.execute('''
-    SELECT * FROM alerts WHERE user_id = ?
+    SELECT a.id, a.user_id, a.target_price, c.name, c.id
+    FROM alerts as a join cryptocurrencies as c on c.id = a.cryptocurrency_id
+    WHERE user_id = ?
     ''', (user_id,))
     alerts = cursor.fetchall()
     conn.close()

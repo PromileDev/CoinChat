@@ -2,7 +2,7 @@ import json
 import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, ManageAPI, PricePage
+from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, ManageAPI, PricePage, AlertsPage, ManageAlerts
 
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
@@ -114,7 +114,7 @@ async def echo(update: Update, context):
             await update.message.reply_text(f'Precio de Bitcoin: {price} {currency}')
         except Exception as e:
             await update.message.reply_text(f'Error al obtener el precio: {e}')
-
+        await start(update, context)
     elif message_text == "Ethereum":
         currency = ManageBD.getCurrency(user_id)
         try:
@@ -122,7 +122,7 @@ async def echo(update: Update, context):
             await update.message.reply_text(f'Precio de Ethereum: {price} {currency}')
         except Exception as e:
             await update.message.reply_text(f'Error al obtener el precio: {e}')
-
+        await start(update, context)
     elif message_text == "Litecoin":
         currency = ManageBD.getCurrency(user_id)
         try:
@@ -130,21 +130,20 @@ async def echo(update: Update, context):
             await update.message.reply_text(f'Precio de Litecoin: {price} {currency}')
         except Exception as e:
             await update.message.reply_text(f'Error al obtener el precio: {e}')
+        await start(update, context)
     elif message_text == "Volver" or message_text == "Back":
         await start(update, context)
 
-# Ejecución del bot
 
-    
-    
-    # # Alerts
-    # elif message_text == "Alertas" or message_text == "Alerts":
-    #     await UserAccount.userProfile(update, context)
-    #     if ManageBD.getLanguage(user_id) == 'es':
-    #         await Alerts.alertsPageESP(update, context)
-    #     else:
-    #         await Alerts.AlertsPageENG(update, context)
-
+    # Alerts
+    elif message_text == "Alertas" or message_text == "Alerts":
+        await UserAccount.userProfile(update, context)
+        if ManageBD.getLanguage(user_id) == 'es':
+            await AlertsPage.alertsPageESP(update, context)
+        else:
+            await AlertsPage.AlertsPageENG(update, context)
+    elif message_text == "Mis alertas" or message_text == "Manage alerts":
+        await ManageAlerts.printAlerts(update, context)
 
 
 #Ejecucion del bot
