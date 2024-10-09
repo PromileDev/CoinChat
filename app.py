@@ -170,10 +170,22 @@ async def echo(update: Update, context):
             else:
                 await update.message.reply_text('Introduce la cantidad objetivo:')
                 context.user_data['selected_currency'] = 'XBTUSD'
+        elif message_text == "Ethereum":
+            if user_currency == 'EUR':
+                await update.message.reply_text('Introduce la cantidad objetivo:')
+                context.user_data['selected_currency'] = 'ETHEUR'
+            else:
+                await update.message.reply_text('Introduce la cantidad objetivo:')
+                context.user_data['selected_currency'] = 'ETHUSD'
+        elif message_text == "Litecoin":
+            if user_currency == 'EUR':
+                await update.message.reply_text('Introduce la cantidad objetivo:')
+                context.user_data['selected_currency'] = 'LTCEUR'
+            else:
+                await update.message.reply_text('Introduce la cantidad objetivo:')
+                context.user_data['selected_currency'] = 'LTCUSD'
         context.user_data['current_page'] = 'waiting_for_amount'
         return
-
-
 
     elif current_page == 'waiting_for_amount':
         price = message_text
@@ -181,6 +193,10 @@ async def echo(update: Update, context):
         ManageBD.addAlert(user_id, selected_currency, price)
         await update.message.reply_text('Alerta añadida correctamente')
         context.user_data['current_page'] = 'main'
+        if ManageBD.getLanguage(user_id) == 'es':
+            await MainPage.MainPageESP(update, context)
+        else:
+            await MainPage.MainPageENG(update, context)
 
 def main():
     app = ApplicationBuilder().token(token).build()

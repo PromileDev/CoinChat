@@ -15,7 +15,7 @@ async def main_loop():
             msg = f"Has alcanzado tu objetivo de {crypto_name} con un precio de {current_price}"
             await send_message(Update, None, msg, user_id)  # await aquí ya que send_message es una corutina
         
-        await asyncio.sleep(10)  # asyncio.sleep para no bloquear el bucle asíncrono
+        await asyncio.sleep(3)  # asyncio.sleep para no bloquear el bucle asíncrono
 
 # Ejecutar el bucle principal asíncrono
 if __name__ == "__main__":

@@ -7,14 +7,6 @@ from cogs import ManageBD, MainPage
 async def printAlerts(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     alerts = ManageBD.getAlerts(user_id)
-    if ManageBD.getLanguage(user_id) == 'ENG':
-        keyboard = [
-            [KeyboardButton("Back")]
-        ]
-    else:
-        keyboard = [
-            [KeyboardButton("Volver")]
-        ]
 
     if alerts:
         keyboard = []  # Lista para almacenar los botones
@@ -54,7 +46,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     button_id = query.data
     ManageBD.deleteAlert(button_id)
     await query.edit_message_text(text=f"Has eliminado correctamente la alerta")
-
+    
     if ManageBD.getLanguage(query.from_user.id) == 'es':
         await MainPage.MainPageESP(query, context)
     else:
