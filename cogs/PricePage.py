@@ -4,6 +4,8 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 
 async def pagePrice(update: Update, context):
+    context.user_data['current_page'] = 'price'
+
     # Crear botones en fila (Reply Keyboard)
     keyboard = [
         [KeyboardButton("Bitcoin"), KeyboardButton("Ethereum"),KeyboardButton("Litecoin") ],
@@ -13,3 +15,4 @@ async def pagePrice(update: Update, context):
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     # Envía un mensaje con el teclado de respuesta
     await update.message.reply_text("Elije una opcion",reply_markup=reply_markup)
+
