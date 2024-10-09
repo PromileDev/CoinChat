@@ -1,7 +1,7 @@
 import json
 import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ConversationHandler, ContextTypes
 from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, ManageAPI, PricePage, AlertsPage, ManageAlerts
 
 # Cargar el token desde el archivo config.json
@@ -9,6 +9,8 @@ with open('config.json') as file:
     data = json.load(file)
     token = data['token']
 app = ApplicationBuilder().token(token).build()
+
+CAPTURANDO_ENTRADA = range(1)
 
 # Define una función para el comando /start con botones en fila
 async def start(update: Update, context):
@@ -137,7 +139,6 @@ async def echo(update: Update, context):
 
     # Alerts
     elif message_text == "Alertas" or message_text == "Alerts":
-        await UserAccount.userProfile(update, context)
         if ManageBD.getLanguage(user_id) == 'es':
             await AlertsPage.alertsPageESP(update, context)
         else:
@@ -146,14 +147,38 @@ async def echo(update: Update, context):
         await ManageAlerts.printAlerts(update, context)
 
 
-#Ejecucion del bot
-if __name__ == '__main__':
-    
-    #slash commands
-    app.add_handler(CommandHandler('start', start))
+# Función para capturar la entrada del usuario
+async def capture_input(update: Update, context):
+    user_input = update.message.text
+    await update.message.reply_text(f"Has escrito: {user_input}")
+    return ConversationHandler.END 
+
+
+async def cancel(update: Update, context):
+    await update.message.reply_text("Cancelado.")
+    return ConversationHandler.END
+
+def main():
+    app = ApplicationBuilder().token(token).build()
+
+    # Configura el manejador de conversación
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
+        states={
+            CAPTURANDO_ENTRADA: [MessageHandler(filters.TEXT & ~filters.COMMAND, capture_input)],
+        },
+        fallbacks=[CommandHandler('cancel', cancel)],
+    )
+
+
+    # Agregar manejadores
+    app.add_handler(conv_handler)
+    app.add_handler(CallbackQueryHandler(ManageAlerts.button_callback))  # Maneja la pulsación de botones
     app.add_handler(CommandHandler('help', help))
-    #botones
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+
     print("El bot está en línea y listo para recibir mensajes.")
-    #Ejecutar el bot
     app.run_polling()
+
+if __name__ == '__main__':
+    main()

@@ -1,11 +1,20 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
+from telegram.ext import ContextTypes
+from cogs import ManageBD, MainPage
 
-from cogs import ManageBD
 
-async def printAlerts(update: Update, context):
+
+async def printAlerts(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     alerts = ManageBD.getAlerts(user_id)
+    if ManageBD.getLanguage(user_id) == 'ENG':
+        keyboard = [
+            [KeyboardButton("Back")]
+        ]
+    else:
+        keyboard = [
+            [KeyboardButton("Volver")]
+        ]
 
     if alerts:
         keyboard = []  # Lista para almacenar los botones
@@ -22,6 +31,26 @@ async def printAlerts(update: Update, context):
                 keyboard.append([InlineKeyboardButton(f"{crypto}: {target}€", callback_data=f'{id_alerts}')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await update.message.reply_text('Tus alertas:', reply_markup=reply_markup)
+        await update.message.reply_text('Selecciona una alerta para borrar:', reply_markup=reply_markup)
+        
     else:
-        await update.message.reply_text('No tienes alertas.')
+        await update.message.reply_text('No tienes alertas. Puedes añadir una en el menú principal')
+        if ManageBD.getLanguage(user_id) == 'ENG':
+            await MainPage.MainPageENG(update, context)
+        else:
+            await MainPage.MainPageESP(update, context) 
+    
+
+
+async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    query = update.callback_query
+    await query.answer()
+
+    button_id = query.data
+    ManageBD.deleteAlert(button_id)
+    await query.edit_message_text(text=f"Has eliminado correctamente la alerta")
+
+    if ManageBD.getLanguage(query.from_user.id) == 'es':
+        await MainPage.MainPageESP(query, context)
+    else:
+        await MainPage.MainPageENG(query, context)
