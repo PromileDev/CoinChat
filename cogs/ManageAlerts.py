@@ -40,7 +40,12 @@ async def printAlerts(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             await MainPage.MainPageESP(update, context) 
     
-
+async def newAlertPage(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id
+    if ManageBD.getLanguage(user_id) == 'ENG':
+        await update.message.reply_text('Select the crypto:')
+    else:
+        await update.message.reply_text(':')
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
