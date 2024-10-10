@@ -9,8 +9,8 @@ async def userProfile(update: Update, context):
     lenguage = 'Español' if lenguage == 'es' else 'English'
     currency = ManageBD.getCurrency(user_id)
 
-    await update.message.reply_text(f'ID: {user_id} | Nombre: {username}')
-    await update.message.reply_text(f'Idioma: {lenguage} | Divisa: {currency}')
+    await update.message.reply_text(f'ID: {user_id} | ' +  ManageBD.getPrompt(ManageBD.getLanguage(user_id), "name_msg") + f' {username}')
+    await update.message.reply_text( ManageBD.getPrompt(ManageBD.getLanguage(user_id), "len_msg") + f' {lenguage} | ' +  ManageBD.getPrompt(ManageBD.getLanguage(user_id), "curren_msg") + f' {currency}')
 
 async def configPageESP(update: Update, context):
     keyboard = [

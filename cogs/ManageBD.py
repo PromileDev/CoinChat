@@ -235,12 +235,25 @@ def getCurrency(user_id):
 def getPrompt(language, id_text):
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
-    cursor.execute('''
-    SELECT prompt FROM languages WHERE language = ? AND id_text = ?
-    ''', (language, id_text))
-    user = cursor.fetchone()
-    conn.close()
-    return user[0]
+    
+    try:
+        cursor.execute('''
+        SELECT prompt FROM languages WHERE language = ? AND id_text = ?
+        ''', (language, id_text))
+        
+        user = cursor.fetchone()  # Obtiene la fila resultante
+        
+        if user is None:
+            # Manejo del caso donde no se encuentra el mensaje
+            return "Mensaje no encontrado."  # Mensaje por defecto si no existe el esperado
+        
+        return user[0]  # Devuelve el primer elemento si existe
+
+    except sqlite3.Error as e:
+        # Manejo de errores de la base de datos
+        print(f"Error al acceder a la base de datos: {e}")
+        return "Error al acceder al mensaje."  # Mensaje por defecto en caso de error
+
 
 
 #delete all usaers
