@@ -154,7 +154,7 @@ async def echo(update: Update, context):
         if ManageBD.getLanguage(user_id) == 'es':
             await AlertsPage.alertsPageESP(update, context)
         else:
-            await AlertsPage.AlertsPageENG(update, context)
+            await AlertsPage.alertsPageENG(update, context)
     elif message_text == "Mis alertas" or message_text == "Manage alerts":
         await ManageAlerts.printAlerts(update, context)
 
