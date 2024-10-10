@@ -9,7 +9,7 @@ async def alertsPageESP(update: Update, context):
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     # Envía un mensaje con el teclado de respuesta
-    await update.message.reply_text('Elige una opcion:', reply_markup=reply_markup)
+    await update.message.reply_text(ManageBD.getPrompt("es", "option_msg"), reply_markup=reply_markup)
 
 async def alertsPageENG(update: Update, context):
     user_id = update.message.from_user.id
@@ -20,7 +20,7 @@ async def alertsPageENG(update: Update, context):
     ]
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True, one_time_keyboard=True)
     # Envía un mensaje con el teclado de respuesta
-    await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "option_msg"), reply_markup=reply_markup)
+    await update.message.reply_text(ManageBD.getPrompt("en", "option_msg"), reply_markup=reply_markup)
 
 
 async def newAlertPage(update: Update, context):
