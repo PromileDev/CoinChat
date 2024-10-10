@@ -157,8 +157,6 @@ async def echo(update: Update, context):
             await AlertsPage.alertsPageENG(update, context)
     elif message_text == "Mis alertas" or message_text == "Manage alerts":
         await ManageAlerts.printAlerts(update, context)
-
-
     elif message_text == "Nueva Alerta" or message_text == "New Alert":
         await AlertsPage.newAlertPage(update, context)
     elif current_page == 'new_alert':
