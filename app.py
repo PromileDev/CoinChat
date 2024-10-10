@@ -4,6 +4,9 @@ from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ConversationHandler, ContextTypes
 from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, ManageAPI, PricePage, AlertsPage, ManageAlerts
 
+file_esp = "docs/Términos y Condiciones de Uso.pdf"
+file_eng = "docs/Terms and Conditions of Use.pdf"
+
 # Cargar el token desde el archivo config.json
 with open('config.json') as file:
     data = json.load(file)
@@ -34,6 +37,15 @@ async def start(update: Update, context):
     if ManageBD.getLanguage(user_id) == 'es':
         await MainPage.MainPageESP(update, context)
     else:
+        await MainPage.MainPageENG(update, context)
+
+async def terms(update: Update, context):
+    user_id = update.message.from_user.id
+    if ManageBD.getLanguage(user_id) == 'es':
+        await app.bot.sendDocument(chat_id=user_id, document=open(file_esp, 'rb'))
+        await MainPage.MainPageESP(update, context)
+    else:
+        await app.bot.sendDocument(chat_id=user_id, document=open(file_eng, 'rb'))
         await MainPage.MainPageENG(update, context)
 
 async def send_message(update: Update, context, message, user_id):
@@ -203,6 +215,7 @@ def main():
     app.add_handler(CallbackQueryHandler(ManageAlerts.button_callback))
     app.add_handler(CommandHandler('start', start))  # Maneja la pulsación de botones
     app.add_handler(CommandHandler('help', help))
+    app.add_handler(CommandHandler('terms' , terms))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
 
     print("El bot está en línea y listo para recibir mensajes.")
