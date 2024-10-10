@@ -5,7 +5,7 @@ from cogs import ManageBD, MainPage
 
 
 async def printAlerts(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.message.from_user.id
+    user_id = update.message.from_user.id if update.message else update.callback_query.from_user.id
     alerts = ManageBD.getAlerts(user_id)
 
     if alerts:
@@ -23,29 +23,30 @@ async def printAlerts(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 keyboard.append([InlineKeyboardButton(f"{crypto}: {target}€", callback_data=f'{id_alerts}')])
 
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await update.message.reply_text('Selecciona una alerta para borrar:', reply_markup=reply_markup)
+        await update.message.reply_text( ManageBD.getPrompt(ManageBD.getLanguage(user_id), "selecAlert_msg"), reply_markup=reply_markup)
         
     else:
-        await update.message.reply_text('No tienes alertas. Puedes añadir una en el menú principal')
-        if ManageBD.getLanguage(user_id) == 'ENG':
+        await update.message.reply_text( ManageBD.getPrompt(ManageBD.getLanguage(user_id), "emptyAlert_msg"))
+        if ManageBD.getLanguage(user_id) == 'en':
             await MainPage.MainPageENG(update, context)
         else:
             await MainPage.MainPageESP(update, context) 
     
 async def newAlertPage(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.message.from_user.id
-    if ManageBD.getLanguage(user_id) == 'ENG':
-        await update.message.reply_text('Select the crypto:')
+    user_id = update.message.from_user.id if update.message else update.callback_query.from_user.id
+    if ManageBD.getLanguage(user_id) == 'en':
+        await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "selectCurren"))
     else:
         await update.message.reply_text(':')
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = update.message.from_user.id if update.message else update.callback_query.from_user.id
     query = update.callback_query
     await query.answer()
 
     button_id = query.data
     ManageBD.deleteAlert(button_id)
-    await query.edit_message_text(text=f"Has eliminado correctamente la alerta")
+    await query.edit_message_text(text= ManageBD.getPrompt(ManageBD.getLanguage(user_id), "deleteAlert_msg"))
     
     if ManageBD.getLanguage(query.from_user.id) == 'es':
         await MainPage.MainPageESP(query, context)

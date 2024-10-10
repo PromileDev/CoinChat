@@ -61,14 +61,14 @@ async def echo(update: Update, context):
 
     if message_text == "Español 🇪🇸":
         ManageBD.updateLanguage(user_id, 'es')
-        await update.message.reply_text('Idioma actualizado a Español 🇪🇸')
+        await update.message.reply_text(ManageBD.getPrompt("es", "updateL_msg"))
         if not ManageBD.checkCurrency(user_id):
             await Moneda.selectCurrency(update, context)
         else:
             await MainPage.MainPageESP(update, context)
     elif message_text == "English 🇬🇧":
         ManageBD.updateLanguage(user_id, 'en')
-        await update.message.reply_text('Language updated to English 🇬🇧')
+        await update.message.reply_text(ManageBD.getPrompt("en", "updateL_msg"))
         if not ManageBD.checkCurrency(user_id):
             await Moneda.selectCurrency(update, context)
         else:
@@ -76,7 +76,7 @@ async def echo(update: Update, context):
     
     elif message_text == "EUR €":
         ManageBD.updateCurrency(user_id, 'EUR')
-        await update.message.reply_text('Currency updated to EUR €.')
+        await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "updateD_msg") + ' EUR €.')
         if not ManageBD.checkLanguage(user_id):
             await Language.selectLanguage(update, context)
         else:
@@ -87,7 +87,7 @@ async def echo(update: Update, context):
 
     elif message_text == "USD $":
         ManageBD.updateCurrency(user_id, 'USD')
-        await update.message.reply_text('Currency updated to USD $.')
+        await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "updateD_msg") + ' USD $.')
         if not ManageBD.checkLanguage(user_id):
             await Language.selectLanguage(update, context)
         else:
@@ -120,27 +120,27 @@ async def echo(update: Update, context):
             currency = ManageBD.getCurrency(user_id)
             try:
                 price = ManageAPI.getPriceEUR("XBT") if currency == 'EUR' else ManageAPI.getPriceUSD("XBT")
-                await update.message.reply_text(f'Precio de Bitcoin: {price} {currency}')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "priceB_msg") + f' {price} {currency}')
             except Exception as e:
-                await update.message.reply_text(f'Error al obtener el precio: {e}')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "errorP_msg") + f'{e}')
             await start(update, context)
 
         elif message_text == "Ethereum":
             currency = ManageBD.getCurrency(user_id)
             try:
                 price = ManageAPI.getPriceEUR("ETH") if currency == 'EUR' else ManageAPI.getPriceUSD("ETH")
-                await update.message.reply_text(f'Precio de Ethereum: {price} {currency}')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "priceE_msg") + f' {price} {currency}')
             except Exception as e:
-                await update.message.reply_text(f'Error al obtener el precio: {e}')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "errorP_msg") + f'{e}')
             await start(update, context)
 
         elif message_text == "Litecoin":
             currency = ManageBD.getCurrency(user_id)
             try:
                 price = ManageAPI.getPriceEUR("LTC") if currency == 'EUR' else ManageAPI.getPriceUSD("LTC")
-                await update.message.reply_text(f'Precio de Litecoin: {price} {currency}')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "priceL_msg") + f' {price} {currency}')
             except Exception as e:
-                await update.message.reply_text(f'Error al obtener el precio: {e}')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "errorP_msg") + f'{e}')
             await start(update, context)
 
         elif message_text == "Volver" or message_text == "Back":
@@ -154,7 +154,7 @@ async def echo(update: Update, context):
         if ManageBD.getLanguage(user_id) == 'es':
             await AlertsPage.alertsPageESP(update, context)
         else:
-            await AlertsPage.AlertsPageENG(update, context)
+            await AlertsPage.alertsPageENG(update, context)
     elif message_text == "Mis alertas" or message_text == "Manage alerts":
         await ManageAlerts.printAlerts(update, context)
 
@@ -165,24 +165,24 @@ async def echo(update: Update, context):
         user_currency = ManageBD.getCurrency(user_id)
         if message_text == "Bitcoin":
             if user_currency == 'EUR':
-                await update.message.reply_text('Introduce la cantidad objetivo:')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "inputTarget_msg"))
                 context.user_data['selected_currency'] = 'XBTEUR'
             else:
-                await update.message.reply_text('Introduce la cantidad objetivo:')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "inputTarget_msg"))
                 context.user_data['selected_currency'] = 'XBTUSD'
         elif message_text == "Ethereum":
             if user_currency == 'EUR':
-                await update.message.reply_text('Introduce la cantidad objetivo:')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "inputTarget_msg"))
                 context.user_data['selected_currency'] = 'ETHEUR'
             else:
-                await update.message.reply_text('Introduce la cantidad objetivo:')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "inputTarget_msg"))
                 context.user_data['selected_currency'] = 'ETHUSD'
         elif message_text == "Litecoin":
             if user_currency == 'EUR':
-                await update.message.reply_text('Introduce la cantidad objetivo:')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "inputTarget_msg"))
                 context.user_data['selected_currency'] = 'LTCEUR'
             else:
-                await update.message.reply_text('Introduce la cantidad objetivo:')
+                await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "inputTarget_msg"))
                 context.user_data['selected_currency'] = 'LTCUSD'
         context.user_data['current_page'] = 'waiting_for_amount'
         return
@@ -191,7 +191,7 @@ async def echo(update: Update, context):
         price = message_text
         selected_currency = context.user_data.get('selected_currency')
         ManageBD.addAlert(user_id, selected_currency, price)
-        await update.message.reply_text('Alerta añadida correctamente')
+        await update.message.reply_text(ManageBD.getPrompt(ManageBD.getLanguage(user_id), "alertConfirm_msg"))
         context.user_data['current_page'] = 'main'
         if ManageBD.getLanguage(user_id) == 'es':
             await MainPage.MainPageESP(update, context)
