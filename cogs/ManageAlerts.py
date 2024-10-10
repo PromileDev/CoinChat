@@ -22,6 +22,10 @@ async def printAlerts(update: Update, context: ContextTypes.DEFAULT_TYPE):
             else:
                 keyboard.append([InlineKeyboardButton(f"{crypto}: {target}€", callback_data=f'{id_alerts}')])
 
+        if ManageBD.getLanguage(user_id) == 'en':
+            keyboard.append([InlineKeyboardButton(f"Back", callback_data='back')])
+        else:
+            keyboard.append([InlineKeyboardButton(f"Volver", callback_data='back')])
         reply_markup = InlineKeyboardMarkup(keyboard)
         await update.message.reply_text( ManageBD.getPrompt(ManageBD.getLanguage(user_id), "selecAlert_msg"), reply_markup=reply_markup)
         
@@ -43,12 +47,16 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id if update.message else update.callback_query.from_user.id
     query = update.callback_query
     await query.answer()
-
     button_id = query.data
     ManageBD.deleteAlert(button_id)
-    await query.edit_message_text(text= ManageBD.getPrompt(ManageBD.getLanguage(user_id), "deleteAlert_msg"))
-    
-    if ManageBD.getLanguage(query.from_user.id) == 'es':
-        await MainPage.MainPageESP(query, context)
+    if button_id == 'back':
+        if ManageBD.getLanguage(user_id) == 'en':
+            await MainPage.MainPageENG(query, context)
+        else:
+            await MainPage.MainPageESP(query, context)
     else:
-        await MainPage.MainPageENG(query, context)
+        await query.edit_message_text(text= ManageBD.getPrompt(ManageBD.getLanguage(user_id), "deleteAlert_msg"))
+        if ManageBD.getLanguage(query.from_user.id) == 'es':
+            await MainPage.MainPageESP(query, context)
+        else:
+            await MainPage.MainPageENG(query, context)
