@@ -31,7 +31,7 @@ Este bot de Telegram permite a los usuarios consultar el precio actual de varias
     ```bash
    pip install -r req.txt
     ```
-3. Configura el archivo ```config.py``` con tu token de bot de Telegram y otros prámetros necesarios.
+3. Crea y configura el archivo ```.env``` con ```API_TOKEN="[tu token]"``` para poder ejecutar el bot.
 
 ## Uso
 
