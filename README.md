@@ -40,35 +40,35 @@ Este bot de Telegram permite a los usuarios consultar el precio actual de varias
 2. Ejecutamos ```/start```
 
 3. Seleccionamos el idioma.
-![alt text](image.png)
+![alt text](img/image.png)
 
 4. Y ahora la moneda.
-![alt text](image-1.png)
+![alt text](img/image-1.png)
 
 ## Precio
 
 1. Pulsamos sobre el boton de precio.
-![alt text](<Captura de pantalla 2024-10-25 170842.png>)
+![alt text](<img/Captura de pantalla 2024-10-25 170842.png>)
 
 2. Seleccionamos la moneda deseada.
 
-![alt text](image-2.png)
-![alt text](image-3.png)
+![alt text](img/image-2.png)
+![alt text](img/image-3.png)
 
 ## Alertas
 ### Configurar alertas
-![alt text](<Captura de pantalla 2024-10-25 172151.png>)
+![alt text](<img/Captura de pantalla 2024-10-25 172151.png>)
 
 1. Seleccionamos la criptomoneda deseada.
-![alt text](image-5.png)
+![alt text](img/image-5.png)
 2. Introducimos la cantidad deseada 
 ### Mis alertas
 ![alt text](<img/Captura de pantalla 2024-10-25 171557.png>)
 
 
 - En caso de no tener alertas saldra este mensaje.
-![alt text](image.png)
+![alt text](img/image.png)
 
 - Si por otro caso si tenemos alertas configuradas saldra este mensaje. Pulsando sobre la alarma la eliminara.
-![alt text](image-6.png)
+![alt text](img/image-6.png)
 
