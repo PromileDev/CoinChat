@@ -1,16 +1,16 @@
-import json
+
 import asyncio
 from telegram import Update, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ConversationHandler, ContextTypes
 from cogs import ManageBD, Language, Moneda, MainPage, UserAccount, ManageAPI, PricePage, AlertsPage, ManageAlerts
-
+from dotenv import load_dotenv
+import os
 file_esp = "docs/Términos y Condiciones de Uso.pdf"
 file_eng = "docs/Terms and Conditions of Use.pdf"
 
 # Cargar el token desde el archivo config.json
-with open('config.json') as file:
-    data = json.load(file)
-    token = data['token']
+load_dotenv()
+token = os.getenv('API_TOKEN')
 app = ApplicationBuilder().token(token).build()
 
 
