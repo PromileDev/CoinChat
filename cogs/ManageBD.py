@@ -121,6 +121,7 @@ def addAlert(user_id, cryptocurrency_id, target_price):
     ''', (user_id, cryptocurrency_id, target_price))
     conn.commit()
     conn.close()
+    
 def check_price_alerts():
     conn = sqlite3.connect('telegram_bot.db')
     cursor = conn.cursor()
@@ -136,10 +137,20 @@ def check_price_alerts():
     
     for alert in alerts:
         id, user_id, crypto_name, current_price, target_price = alert
-        if current_price >= target_price:  # Verifica si se ha alcanzado el objetivo
-            notifications.append((user_id, crypto_name, current_price))
+        codigo_err = 0;
+        try: 
+            if current_price >= target_price:  # Verifica si se ha alcanzado el objetivo
+                notifications.append((user_id, crypto_name, current_price, codigo_err))
+                cursor.execute('DELETE FROM alerts WHERE id = ?', (id,))
+                conn.commit()
+                return notifications
+        except:
+            codigo_err = 1
             cursor.execute('DELETE FROM alerts WHERE id = ?', (id,))
             conn.commit()
+            notifications.append((user_id, crypto_name, current_price, codigo_err))
+            return notifications
+            
     
     conn.close()
     return notifications
