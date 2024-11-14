@@ -45,6 +45,16 @@ CREATE TABLE IF NOT EXISTS languages (
 ''')
 
 cursor.execute('''
+create table if not exists history_price(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cryptocurrency_id TEXT NOT NULL,
+    price REAL NOT NULL,
+    date TEXT NOT NULL,
+    FOREIGN KEY(cryptocurrency_id) REFERENCES cryptocurrencies(id)
+)
+''')
+
+cursor.execute('''
 INSERT OR IGNORE INTO cryptocurrencies (id, name, currency ,current_price) VALUES
 ('LTCEUR', 'Litecoin', 'EUR' ,0),
 ('ETHEUR', 'Ethereum', 'EUR' ,0),
@@ -305,4 +315,16 @@ def print_all_users():
         print(row)
     conn.close()
 
-print_all_users()
+
+def get_history_price(cryptocurrency_id):
+    conn = sqlite3.connect('telegram_bot.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+    SELECT price, date FROM (select price, date from history_price WHERE cryptocurrency_id = ? order by date desc limit 3) as last_two order by date asc;
+    ''', (cryptocurrency_id,))
+    history = cursor.fetchall()
+    conn.close()
+    return history
+
+
+print(get_history_price('XBTEUR'))
