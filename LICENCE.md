@@ -14,4 +14,3 @@ Se concede permiso a cualquier persona para usar, copiar y modificar este softwa
 
 ### Contacto
 Si tienes preguntas o sugerencias, no dudes en contactarnos a través de promiledev@promiledev.com.
-

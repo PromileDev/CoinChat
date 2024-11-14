@@ -3,17 +3,18 @@ from telegram import InputFile
 from telegram.ext import ApplicationBuilder, CommandHandler
 from dotenv import load_dotenv
 import os
+from io import BytesIO  # Importar BytesIO para manejar imágenes en memoria
 
 # Función para generar la imagen con texto
 def generate_image():
     # Abre la plantilla
-    image_path = "btc_price.png"
+    image_path = "plantilla/btc_price.jpg"
     image = Image.open(image_path)
 
     # Configuración del texto
     text = "10.000€"
-    font_size = 100  # Ajusta el tamaño según tu imagen y preferencias
-    font = ImageFont.truetype("arial.ttf", font_size)  # Asegúrate de tener la fuente Arial o cambia a otra
+    font_size = 300  # Ajusta el tamaño según tu imagen y preferencias
+    font = ImageFont.truetype("font/Geist-Regular.ttf", font_size)  # Asegúrate de tener la fuente o cambia a otra
 
     # Dibuja el texto en el centro
     draw = ImageDraw.Draw(image)
@@ -21,23 +22,25 @@ def generate_image():
     bbox = draw.textbbox((0, 0), text, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
-    x = (image.width - text_width) / 2
-    y = (image.height - text_height) / 2
-    draw.text((x, y), text, font=font, fill="black")  # Cambia el color de texto si deseas
+    x = ((image.width - text_width) / 2) - 450
+    y = ((image.height - text_height) / 2) - 100
+    draw.text((x, y), text, font=font, fill="#f2c158")  # Cambia el color de texto si deseas
 
-    # Guarda la imagen
-    image.save("btc_price_with_text.png")
-    return "btc_price_with_text.png"
+    # Guarda la imagen en memoria (en lugar de guardarla en el disco)
+    img_byte_arr = BytesIO()
+    image.save(img_byte_arr, format="PNG")  # Guarda en formato PNG
+    img_byte_arr.seek(0)  # Reposiciona el puntero al inicio del archivo en memoria
+
+    return img_byte_arr
 
 # Función para enviar la imagen por el bot de Telegram
 async def send_image(update, context):
-    # Genera la imagen
-    image_path = generate_image()
+    # Genera la imagen en memoria
+    img_byte_arr = generate_image()
 
     # Envía la imagen al usuario
     chat_id = update.message.chat_id
-    with open(image_path, 'rb') as image_file:
-        await context.bot.send_photo(chat_id=chat_id, photo=image_file)
+    await context.bot.send_photo(chat_id=chat_id, photo=InputFile(img_byte_arr, filename="btc_price_with_text.png"))
 
 # Inicializa el bot
 def main():
