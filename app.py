@@ -19,6 +19,7 @@ async def start(update: Update, context):
     user_id = update.message.from_user.id
     username = update.message.from_user.name
     context.user_data['current_page'] = 'main'
+    
 
     # Verifica si el usuario ya está en la base de datos
     if not ManageBD.checkUser(user_id):
