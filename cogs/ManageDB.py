@@ -24,5 +24,7 @@ else:
 
 cursor = conn.cursor()
 
+cursor.execute("")
+
 cursor.close()
 conn.close()
