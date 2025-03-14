@@ -22,9 +22,10 @@ async def start(update: Update, context):
 
 
 def main():
+    # Crear la aplicación
     app = ApplicationBuilder().token(token).build()
 
-    # Agregar manejadores
+    # Agregar los manejadores de comandos
     app.add_handler(CommandHandler('start', start))
     app.add_handler(CommandHandler('help', help))
 
