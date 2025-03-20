@@ -17,7 +17,7 @@ app = ApplicationBuilder().token(token).build()
 async def start(update: Update, context):
     user_id = update.message.from_user.id
     username = update.message.from_user.name
-    await update.message.reply_text("Welcome to CryptoBot! 🤖")
+    await update.message.reply_text("Welcome to coinchat! 🤖")
     context.user_data['current_page'] = 'main'
 
 
